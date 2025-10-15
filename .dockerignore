@@ -1,0 +1,17 @@
+# залежності
+node_modules
+
+# збірки
+dist
+build
+
+# лог файли
+*.log
+
+
+.vscode
+.idea
+
+# Git
+.git
+.gitignore
