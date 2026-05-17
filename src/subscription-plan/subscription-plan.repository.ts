@@ -1,20 +1,26 @@
 import { Injectable } from '@nestjs/common';
-import { DatabaseService } from '@ross2p/database';
+
+const REPO_STUB_MSG =
+  'Repository not implemented: per-service DB pending';
+
+export interface SubscriptionPlanRecord {
+  id: string;
+  name: string;
+  description: string;
+  price: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
 
 @Injectable()
 export class SubscriptionPlanRepository {
-  private subscriptionPlanRepository;
-
-  constructor(db: DatabaseService) {
-    this.subscriptionPlanRepository = db.client.subscriptionPlan;
-  }
-  async findAllSubscriptionPlans() {
-    return this.subscriptionPlanRepository.findMany();
+  async findAllSubscriptionPlans(): Promise<SubscriptionPlanRecord[]> {
+    throw new Error(REPO_STUB_MSG);
   }
 
-  async findSubscriptionPlanById(id: string) {
-    return this.subscriptionPlanRepository.findUnique({
-      where: { id },
-    });
+  async findSubscriptionPlanById(
+    _id: string,
+  ): Promise<SubscriptionPlanRecord | null> {
+    throw new Error(REPO_STUB_MSG);
   }
 }

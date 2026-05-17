@@ -1,28 +1,44 @@
 import { UpdateSubscriptionDto } from './dtos/update-subscription.dto';
 import { Injectable } from '@nestjs/common';
-import { DatabaseService } from '@ross2p/database';
 import { CreateSubscriptionDto } from './dtos/create-subscription.dto';
+
+const REPO_STUB_MSG =
+  'Repository not implemented: per-service DB pending';
+
+/** Shape aligned with former Prisma `Subscription` model (per-service DB TBD). */
+export interface SubscriptionRecord {
+  id: string;
+  userId: string;
+  planId: string;
+  startDate: Date;
+  endDate: Date;
+  createdAt: Date;
+  updatedAt: Date;
+  deletedAt: Date | null;
+}
 
 @Injectable()
 export class SubscriptionRepository {
-  private readonly subscriptionRepository;
-  constructor(db: DatabaseService) {
-    this.subscriptionRepository = db.client.subscription;
+  async createSubscription(
+    _data: CreateSubscriptionDto,
+  ): Promise<SubscriptionRecord> {
+    throw new Error(REPO_STUB_MSG);
   }
 
-  async createSubscription(data: CreateSubscriptionDto) {
-    return null;
+  async findSubscriptionById(_id: string): Promise<SubscriptionRecord | null> {
+    throw new Error(REPO_STUB_MSG);
   }
 
-  async findSubscriptionById(id: string) {
-    return null;
+  async findActiveSubscriptionByUserId(
+    _userId: string,
+  ): Promise<SubscriptionRecord | null> {
+    throw new Error(REPO_STUB_MSG);
   }
 
-  async findActiveSubscriptionByUserId(userId: string) {
-    return null;
-  }
-
-  async updateSubscription(id: string, data: UpdateSubscriptionDto) {
-    return null;
+  async updateSubscription(
+    _id: string,
+    _data: UpdateSubscriptionDto,
+  ): Promise<SubscriptionRecord> {
+    throw new Error(REPO_STUB_MSG);
   }
 }

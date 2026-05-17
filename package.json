@@ -22,12 +22,14 @@
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",
+    "@nestjs/config": "^4.0.2",
     "@nestjs/core": "^11.0.1",
+    "@nestjs/microservices": "^11.1.3",
     "@nestjs/platform-express": "^11.0.1",
     "@nestjs/swagger": "^11.2.0",
-    "@ross2p/common": "^0.1.7",
-    "@ross2p/database": "latest",
-    "@ross2p/types": "^0.0.5",
+    "@ross2p/common": "file:../../libs/common",
+    "@ross2p/types": "file:../../libs/types",
+    "kafkajs": "^2.2.4",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1"
   },

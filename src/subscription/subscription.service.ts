@@ -3,7 +3,6 @@ import { SubscriptionRepository } from './subscription.repository';
 import { CreateSubscriptionDto } from './dtos/create-subscription.dto';
 import { UpdateSubscriptionDto } from './dtos/update-subscription.dto';
 import { checkExists } from '@ross2p/common';
-import { Transactional } from '@ross2p/database';
 
 @Injectable()
 export class SubscriptionService {
@@ -11,7 +10,7 @@ export class SubscriptionService {
     private readonly subscriptionRepository: SubscriptionRepository,
   ) {}
 
-  @Transactional()
+  // TODO: wrap in DB transaction when per-service Prisma is added
   async createSubscription(data: CreateSubscriptionDto) {
     const activeSubscription =
       await this.subscriptionRepository.findActiveSubscriptionByUserId(
