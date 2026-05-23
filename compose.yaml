@@ -3,12 +3,15 @@ version: "3.8"
 services:
   subscription-service:
     build:
+      context: .
       dockerfile: Dockerfile
     hostname: subscription-service
     ports:
       - "${BACKEND_PORT:-3005}:3000"
     env_file:
       - ./.env
+    environment:
+      KAFKA_BROKER: ${KAFKA_BROKER:-kafka:29092}
     networks:
       - app-network
     command: npm run start:prod
