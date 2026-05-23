@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: subscription-config
+  namespace: mindlet
+  labels:
+    app.kubernetes.io/name: subscription
+    app.kubernetes.io/part-of: mindlet
+data:
+  PORT: "3000"
+  NODE_ENV: development
+  SERVICE_NAME: SUBSCRIPTION_SERVICE
+  SWAGGER_USER: admin
+  TWO_FACTOR_ISSUER: Mindlet

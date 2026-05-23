@@ -1,0 +1,19 @@
+version: "3.8"
+
+services:
+  subscription-service:
+    build:
+      dockerfile: Dockerfile
+    hostname: subscription-service
+    ports:
+      - "${BACKEND_PORT:-3005}:3000"
+    env_file:
+      - ./.env
+    networks:
+      - app-network
+    command: npm run start:prod
+    restart: unless-stopped
+
+networks:
+  app-network:
+    driver: bridge
