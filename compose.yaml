@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile
     hostname: subscription-service
     ports:
-      - "${BACKEND_PORT:-3005}:3000"
+      - "${BACKEND_PORT:-4005}:3000"
     env_file:
       - ./.env
     environment:
