@@ -1,18 +1,34 @@
-import { Controller, Delete, Get } from '@nestjs/common';
-import { AuthenticatedUser, UserDetails } from '@ross2p/common';
-import { SubscriptionService } from './../subscription/subscription.service';
+import { Controller } from '@nestjs/common';
+import { MessagePattern } from '@nestjs/microservices';
+import {
+  DataPayload,
+  SubscriptionMessage,
+  SubscriptionQuery,
+  ValidationPipe,
+} from '@ross2p/common';
+import { UserIdQueryDto } from '../subscription/dtos/user-id-query.dto';
+import { userIdQuerySchema } from '../subscription/schemas/user-id-query.schema';
+import { SubscriptionService } from '../subscription/subscription.service';
 
-@Controller('my')
+@Controller()
 export class MySubscriptionController {
   constructor(private readonly subscriptionService: SubscriptionService) {}
 
-  @Get()
-  async getMySubscription(@UserDetails() user: AuthenticatedUser) {
-    return this.subscriptionService.findActiveSubscriptionByUserId(user.id);
+  @MessagePattern(SubscriptionQuery.GET_ACTIVE_BY_USER)
+  public getMySubscription(
+    @DataPayload(new ValidationPipe(userIdQuerySchema))
+    data: UserIdQueryDto,
+  ) {
+    return this.subscriptionService.findActiveSubscriptionByUserId(data.userId);
   }
 
-  @Delete()
-  async cancelMySubscription(@UserDetails() user: AuthenticatedUser) {
-    return this.subscriptionService.cancelActiveSubscriptionByUserId(user.id);
+  @MessagePattern(SubscriptionMessage.CANCEL_ACTIVE_BY_USER)
+  public cancelMySubscription(
+    @DataPayload(new ValidationPipe(userIdQuerySchema))
+    data: UserIdQueryDto,
+  ) {
+    return this.subscriptionService.cancelActiveSubscriptionByUserId(
+      data.userId,
+    );
   }
 }

@@ -1,19 +1,30 @@
+import { Controller } from '@nestjs/common';
+import { MessagePattern } from '@nestjs/microservices';
+import {
+  DataPayload,
+  SubscriptionPlanQuery,
+  ValidationPipe,
+} from '@ross2p/common';
+import { SubscriptionPlanIdQueryDto } from './dtos/subscription-plan-id-query.dto';
+import { subscriptionPlanIdQuerySchema } from './schemas/subscription-plan-id-query.schema';
 import { SubscriptionPlanService } from './subscription-plan.service';
-import { Controller, Get, Param } from '@nestjs/common';
 
-@Controller('plan')
+@Controller()
 export class SubscriptionPlanController {
   constructor(
     private readonly subscriptionPlanService: SubscriptionPlanService,
   ) {}
 
-  @Get()
-  async findAllSubscriptionPlans() {
+  @MessagePattern(SubscriptionPlanQuery.LIST)
+  public findAllSubscriptionPlans() {
     return this.subscriptionPlanService.findAllSubscriptionPlans();
   }
 
-  @Get(':id')
-  async findSubscriptionPlanById(@Param('id') id: string) {
-    return this.subscriptionPlanService.findSubscriptionPlanById(id);
+  @MessagePattern(SubscriptionPlanQuery.GET_BY_ID)
+  public findSubscriptionPlanById(
+    @DataPayload(new ValidationPipe(subscriptionPlanIdQuerySchema))
+    data: SubscriptionPlanIdQueryDto,
+  ) {
+    return this.subscriptionPlanService.findSubscriptionPlanById(data.planId);
   }
 }
