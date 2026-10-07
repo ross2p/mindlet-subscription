@@ -1,7 +1,7 @@
+/* eslint-disable @typescript-eslint/require-await, @typescript-eslint/no-unused-vars -- stub repository until the per-service DB lands */
 import { Injectable } from '@nestjs/common';
 
-const REPO_STUB_MSG =
-  'Repository not implemented: per-service DB pending';
+const REPO_STUB_MSG = 'Repository not implemented: per-service DB pending';
 
 export interface SubscriptionPlanRecord {
   id: string;

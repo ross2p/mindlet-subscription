@@ -1,9 +1,9 @@
+/* eslint-disable @typescript-eslint/require-await, @typescript-eslint/no-unused-vars -- stub repository until the per-service DB lands */
 import { UpdateSubscriptionDto } from './dtos/update-subscription.dto';
 import { Injectable } from '@nestjs/common';
 import { CreateSubscriptionDto } from './dtos/create-subscription.dto';
 
-const REPO_STUB_MSG =
-  'Repository not implemented: per-service DB pending';
+const REPO_STUB_MSG = 'Repository not implemented: per-service DB pending';
 
 /** Shape aligned with former Prisma `Subscription` model (per-service DB TBD). */
 export interface SubscriptionRecord {

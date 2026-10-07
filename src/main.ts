@@ -1,7 +1,12 @@
 import { Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
-import { KafkaOptions, Transport } from '@nestjs/microservices';
+import { GrpcOptions, KafkaOptions, Transport } from '@nestjs/microservices';
+import {
+  SUBSCRIPTION_GRPC_LOADER_OPTIONS,
+  SUBSCRIPTION_GRPC_PACKAGES,
+  SUBSCRIPTION_GRPC_PROTO_PATHS,
+} from '@ross2p/common';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
@@ -9,6 +14,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const configService = app.get(ConfigService);
 
+  // Fire-and-forget events only — synchronous RPC is served over gRPC below.
   app.connectMicroservice<KafkaOptions>({
     transport: Transport.KAFKA,
     options: {
@@ -23,6 +29,17 @@ async function bootstrap() {
       subscribe: {
         fromBeginning: true,
       },
+    },
+  });
+
+  app.connectMicroservice<GrpcOptions>({
+    transport: Transport.GRPC,
+    options: {
+      package: SUBSCRIPTION_GRPC_PACKAGES,
+      protoPath: SUBSCRIPTION_GRPC_PROTO_PATHS,
+      loader: SUBSCRIPTION_GRPC_LOADER_OPTIONS,
+      url:
+        configService.get<string>('SUBSCRIPTION_GRPC_URL') ?? '0.0.0.0:50058',
     },
   });
 
