@@ -1,4 +1,5 @@
 import { Controller } from '@nestjs/common';
+import * as Joi from 'joi';
 import { GrpcMethod } from '@nestjs/microservices';
 import { SubscriptionPlanProto, ValidationPipe } from '@ross2p/common';
 import { SubscriptionPlanIdQueryDto } from './dtos/subscription-plan-id-query.dto';
@@ -28,5 +29,16 @@ export class SubscriptionPlanController
       subscriptionPlanIdQuerySchema,
     ).transform(request);
     return this.subscriptionPlanService.findSubscriptionPlanById(data.planId);
+  }
+
+  @GrpcMethod('SubscriptionPlanService', 'findTeamPlanLimits')
+  public findTeamPlanLimits(
+    request: SubscriptionPlanProto.TeamPlanLimitsRequest,
+  ): SubscriptionPlanProto.TeamPlanLimits {
+    // Validated although unused today: limits will depend on the team's plan.
+    new ValidationPipe<{ teamId: string }>(
+      Joi.object({ teamId: Joi.string().uuid().required() }),
+    ).transform(request);
+    return this.subscriptionPlanService.findTeamPlanLimits();
   }
 }

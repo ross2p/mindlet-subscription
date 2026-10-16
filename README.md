@@ -27,3 +27,13 @@
 - Product feature(s):
 
 - [16-subscription-and-payments.md](../../../docs/features/16-subscription-and-payments.md)
+
+## Team plan limits
+
+`FindTeamPlanLimits` (gRPC, `SubscriptionPlanService`) returns the limits that apply to a team. Plans are not stored yet, so every team gets the platform ceiling from the environment:
+
+| Variable | Meaning | Default |
+|---|---|---|
+| `MAX_COURSES_PER_TEAM` | Course ceiling returned as `maxCoursesPerTeam` | `50` (placeholder; a positive integer is required, anything else falls back to the default) |
+
+When plan limits are stored, only `SubscriptionPlanService.findTeamPlanLimits` changes; callers (the course service, ADR-0009 of the courses feature) keep the same contract.
