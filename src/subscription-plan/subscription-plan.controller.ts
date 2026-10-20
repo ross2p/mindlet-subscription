@@ -1,7 +1,8 @@
 import { Controller } from '@nestjs/common';
 import * as Joi from 'joi';
 import { GrpcMethod } from '@nestjs/microservices';
-import { SubscriptionPlanProto, ValidationPipe } from '@ross2p/common';
+import { GrpcRequest, ValidationPipe } from '@ross2p/common';
+import { SubscriptionPlanProto } from '../../generated/protos';
 import { SubscriptionPlanIdQueryDto } from './dtos/subscription-plan-id-query.dto';
 import { subscriptionPlanIdQuerySchema } from './schemas/subscription-plan-id-query.schema';
 import { SubscriptionPlanService } from './subscription-plan.service';
@@ -23,11 +24,13 @@ export class SubscriptionPlanController
 
   @GrpcMethod('SubscriptionPlanService', 'findSubscriptionPlanById')
   public findSubscriptionPlanById(
-    request: SubscriptionPlanProto.PlanIdRequest,
+    @GrpcRequest(
+      new ValidationPipe<SubscriptionPlanIdQueryDto>(
+        subscriptionPlanIdQuerySchema,
+      ),
+    )
+    data: SubscriptionPlanIdQueryDto,
   ): Promise<SubscriptionPlanProto.SubscriptionPlanMessage> {
-    const data = new ValidationPipe<SubscriptionPlanIdQueryDto>(
-      subscriptionPlanIdQuerySchema,
-    ).transform(request);
     return this.subscriptionPlanService.findSubscriptionPlanById(data.planId);
   }
 

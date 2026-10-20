@@ -1,6 +1,7 @@
 import { Controller } from '@nestjs/common';
 import { GrpcMethod } from '@nestjs/microservices';
-import { SubscriptionCoreProto, ValidationPipe } from '@ross2p/common';
+import { GrpcRequest, ValidationPipe } from '@ross2p/common';
+import { SubscriptionCoreProto } from '../../generated/protos';
 import { UserIdQueryDto } from '../subscription/dtos/user-id-query.dto';
 import { userIdQuerySchema } from '../subscription/schemas/user-id-query.schema';
 import { SubscriptionService } from '../subscription/subscription.service';
@@ -13,21 +14,17 @@ export class MySubscriptionController
 
   @GrpcMethod('SubscriptionService', 'findActiveSubscription')
   public findActiveSubscription(
-    request: SubscriptionCoreProto.UserIdRequest,
+    @GrpcRequest(new ValidationPipe<UserIdQueryDto>(userIdQuerySchema))
+    data: UserIdQueryDto,
   ): Promise<SubscriptionCoreProto.SubscriptionMessage> {
-    const data = new ValidationPipe<UserIdQueryDto>(
-      userIdQuerySchema,
-    ).transform(request);
     return this.subscriptionService.findActiveSubscriptionByUserId(data.userId);
   }
 
   @GrpcMethod('SubscriptionService', 'cancelActiveSubscription')
   public cancelActiveSubscription(
-    request: SubscriptionCoreProto.UserIdRequest,
+    @GrpcRequest(new ValidationPipe<UserIdQueryDto>(userIdQuerySchema))
+    data: UserIdQueryDto,
   ): Promise<SubscriptionCoreProto.SubscriptionMessage> {
-    const data = new ValidationPipe<UserIdQueryDto>(
-      userIdQuerySchema,
-    ).transform(request);
     return this.subscriptionService.cancelActiveSubscriptionByUserId(
       data.userId,
     );
