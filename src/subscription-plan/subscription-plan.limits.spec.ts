@@ -1,3 +1,4 @@
+import { invokeGrpcHandler } from '@ross2p/common';
 import { SubscriptionPlanController } from './subscription-plan.controller';
 import {
   DEFAULT_MAX_COURSES_PER_TEAM,
@@ -31,21 +32,23 @@ describe('SubscriptionPlanService.findTeamPlanLimits (AC-08)', () => {
 });
 
 describe('SubscriptionPlanController.findTeamPlanLimits', () => {
-  it('passes a valid team id to the service', () => {
+  it('passes a valid team id to the service', async () => {
     const service = {
       findTeamPlanLimits: jest.fn().mockReturnValue({ maxCoursesPerTeam: 7 }),
     };
     const controller = new SubscriptionPlanController(service as never);
-    expect(controller.findTeamPlanLimits({ teamId: TEAM_ID })).toEqual({
-      maxCoursesPerTeam: 7,
-    });
+    await expect(
+      invokeGrpcHandler(controller, 'findTeamPlanLimits', { teamId: TEAM_ID }),
+    ).resolves.toEqual({ maxCoursesPerTeam: 7 });
     expect(service.findTeamPlanLimits).toHaveBeenCalledTimes(1);
   });
 
-  it('rejects a malformed team id before reaching the service', () => {
+  it('rejects a malformed team id before reaching the service', async () => {
     const service = { findTeamPlanLimits: jest.fn() };
     const controller = new SubscriptionPlanController(service as never);
-    expect(() => controller.findTeamPlanLimits({ teamId: 'nope' })).toThrow();
+    await expect(
+      invokeGrpcHandler(controller, 'findTeamPlanLimits', { teamId: 'nope' }),
+    ).rejects.toThrow();
     expect(service.findTeamPlanLimits).not.toHaveBeenCalled();
   });
 });

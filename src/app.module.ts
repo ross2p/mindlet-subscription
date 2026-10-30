@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { APP_FILTER, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
-import { ConfigModule } from '@nestjs/config';
 import {
   CommonModule,
   ErrorFilter,
@@ -16,7 +15,6 @@ import { SubscriptionModule } from './subscription/subscription.module';
 @Module({
   imports: [
     CommonModule,
-    ConfigModule.forRoot({ isGlobal: true }),
     SubscriptionModule,
     SubscriptionPlanModule,
     MySubscriptionModule,

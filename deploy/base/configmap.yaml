@@ -7,7 +7,6 @@ metadata:
     app.kubernetes.io/name: subscription
     app.kubernetes.io/part-of: mindlet
 data:
-  PORT: "3000"
   NODE_ENV: development
   SERVICE_NAME: SUBSCRIPTION_SERVICE
   SWAGGER_USER: admin

@@ -36,12 +36,14 @@ export class SubscriptionPlanController
 
   @GrpcMethod('SubscriptionPlanService', 'findTeamPlanLimits')
   public findTeamPlanLimits(
-    request: SubscriptionPlanProto.TeamPlanLimitsRequest,
-  ): SubscriptionPlanProto.TeamPlanLimits {
     // Validated although unused today: limits will depend on the team's plan.
-    new ValidationPipe<{ teamId: string }>(
-      Joi.object({ teamId: Joi.string().uuid().required() }),
-    ).transform(request);
+    @GrpcRequest(
+      new ValidationPipe<{ teamId: string }>(
+        Joi.object({ teamId: Joi.string().uuid().required() }),
+      ),
+    )
+    _request: { teamId: string },
+  ): SubscriptionPlanProto.TeamPlanLimits {
     return this.subscriptionPlanService.findTeamPlanLimits();
   }
 }
